@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.gds.brasilnoticias.ui.fragments.home.HomeFragment"
+        android:label="Home" >
+        <action
+            android:id="@+id/action_homeFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritosFragment"
+        android:name="com.gds.brasilnoticias.ui.fragments.favorito.FavoritosFragment"
+        android:label="Favoritos" >
+        <action
+            android:id="@+id/action_favoritosFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pesqusiaFragment"
+        android:name="com.gds.brasilnoticias.ui.fragments.pesquisa.PesqusiaFragment"
+        android:label="Pesqusiar" >
+        <action
+            android:id="@+id/action_pesqusiaFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.gds.brasilnoticias.ui.fragments.webview.WebViewFragment"
+        android:label="Artigo" >
+        <argument
+            android:name="artigo"
+            app:argType="com.gds.brasilnoticias.data.local.model.Artigo" />
+    </fragment>
+</navigation>

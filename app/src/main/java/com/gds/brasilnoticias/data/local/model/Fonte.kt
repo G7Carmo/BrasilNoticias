@@ -1,0 +1,8 @@
+package com.gds.brasilnoticias.data.local.model
+
+import java.io.Serializable
+
+data class Fonte(
+    val id: Any,
+    val name: String
+) : Serializable
