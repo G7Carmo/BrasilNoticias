@@ -1,30 +1,37 @@
 package com.gds.brasilnoticias.ui
 
+import android.os.Bundle
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 import com.gds.brasilnoticias.R
+import com.gds.brasilnoticias.databinding.ActivityArtigoBinding
 import com.gds.brasilnoticias.model.Artigo
 import com.gds.brasilnoticias.model.data.NewsDataSource
 import com.gds.brasilnoticias.presenter.ViewHome
 import com.gds.brasilnoticias.presenter.favoritos.FavoritosPresenter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_artigo.*
 
-class ArtigoActivity : AbstractActivity() ,ViewHome.Favoritos{
+
+class ArtigoActivity : AbstractActivity(), ViewHome.Favoritos {
 
     private lateinit var artigo: Artigo
-    private lateinit var presenter : FavoritosPresenter
+    private lateinit var presenter: FavoritosPresenter
 
-    override fun getLayout(): Int = R.layout.activity_artigo
+    private lateinit var binding: ActivityArtigoBinding
+    override fun getLayout(): ViewBinding {
+        binding = ActivityArtigoBinding.inflate(layoutInflater)
+        return binding
+    }
 
     override fun onInject() {
         getArtigo()
         configWebView()
         configPresenter()
-        fabListner()
-    }
+        fabListner()    }
 
     private fun fabListner() {
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             presenter.salvarArtigo(artigo)
             Snackbar.make(
                 it,
@@ -36,7 +43,7 @@ class ArtigoActivity : AbstractActivity() ,ViewHome.Favoritos{
 
     private fun configPresenter() {
         val fonteDeDados = NewsDataSource(this)
-        presenter = FavoritosPresenter(this,fonteDeDados)
+        presenter = FavoritosPresenter(this, fonteDeDados)
     }
 
     private fun getArtigo() {
@@ -46,7 +53,7 @@ class ArtigoActivity : AbstractActivity() ,ViewHome.Favoritos{
     }
 
     private fun configWebView() {
-        webView.apply {
+        binding.webView.apply {
             webViewClient = WebViewClient()
             artigo.url?.let { url ->
                 loadUrl(url)

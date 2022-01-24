@@ -3,16 +3,17 @@ package com.gds.brasilnoticias.ui
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 
 abstract class AbstractActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayout())
+        setContentView(getLayout().root)
         onInject()
     }
-    @LayoutRes
-    protected abstract fun getLayout() : Int
+
+    protected abstract fun getLayout() : ViewBinding
     protected abstract fun onInject()
 
 }

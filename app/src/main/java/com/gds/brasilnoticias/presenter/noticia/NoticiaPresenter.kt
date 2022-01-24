@@ -10,7 +10,7 @@ class NoticiaPresenter(
 ) : NoticiaInicial.Presenter {
     override fun requisitarTudo() {
         this.view.mostrarBarraDeProgresso()
-        this.fonteDeDados.getPrincipaisNoticias(this)
+        this.fonteDeDados.getPrincipaisNoticias(this,"br")
     }
 
     override fun sucesso(novaRespostaDaNoticia: RespostaDaNoticia) {

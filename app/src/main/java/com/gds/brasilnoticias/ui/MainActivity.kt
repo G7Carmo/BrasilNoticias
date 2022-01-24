@@ -1,32 +1,42 @@
 package com.gds.brasilnoticias.ui
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.gds.brasilnoticias.R
 import com.gds.brasilnoticias.adapter.MainAdapter
+import com.gds.brasilnoticias.databinding.ActivityMainBinding
 import com.gds.brasilnoticias.model.Artigo
 import com.gds.brasilnoticias.model.data.NewsDataSource
 import com.gds.brasilnoticias.presenter.ViewHome
 import com.gds.brasilnoticias.presenter.noticia.NoticiaPresenter
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AbstractActivity(), ViewHome.View {
     private val mainAdapter by lazy { MainAdapter() }
 
     private lateinit var presenter: NoticiaPresenter
+    private lateinit var binding: ActivityMainBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun getLayout(): Int = R.layout.activity_main
+    }
+
+    override fun getLayout(): ViewBinding {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        return binding
+    }
 
     override fun onInject() {
         configPresenter()
         configRecycler()
         clickAdapter()
-
     }
 
     private fun configPresenter() {
@@ -36,7 +46,7 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     private fun configRecycler() {
-        with(rvMoticias) {
+        with(binding.rvMoticias) {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(this@MainActivity)
             addItemDecoration(
@@ -48,16 +58,16 @@ class MainActivity : AbstractActivity(), ViewHome.View {
         }
     }
 
-    private fun clickAdapter(){
+    private fun clickAdapter() {
         mainAdapter.setOnClickListner { artigo ->
-            val intent = Intent(this,ArtigoActivity::class.java)
-            intent.putExtra("artigo",artigo)
+            val intent = Intent(this, ArtigoActivity::class.java)
+            intent.putExtra("artigo", artigo)
             startActivity(intent)
         }
     }
 
     override fun mostrarBarraDeProgresso() {
-        rvProgressBar.visibility = View.VISIBLE
+        binding.rvProgressBar.visibility = View.VISIBLE
     }
 
     override fun showFalha(mensagem: String) {
@@ -65,7 +75,7 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     override fun esconderBarraDeProgresso() {
-        rvProgressBar.visibility = View.INVISIBLE
+        binding.rvProgressBar.visibility = View.INVISIBLE
     }
 
     override fun mostrarArtigos(artigos: List<Artigo>) {
@@ -74,20 +84,20 @@ class MainActivity : AbstractActivity(), ViewHome.View {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_item,menu)
+        menuInflater.inflate(R.menu.menu_item, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.pesquisar_menu -> {
-                Intent(this,PesquisarActivity::class.java).apply {
+                Intent(this, PesquisarActivity::class.java).apply {
                     startActivity(this)
                 }
             }
 
             R.id.favoritos_menu -> {
-                Intent(this,FavoritosActivity::class.java).apply {
+                Intent(this, FavoritosActivity::class.java).apply {
                     startActivity(this)
                 }
             }

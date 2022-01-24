@@ -14,10 +14,10 @@ class NewsDataSource(context: Context) {
     private val db: ArtigoDataBase = ArtigoDataBase(context)
     private var novoRepositorio : NewsRepository = NewsRepository(db)
 
-    fun getPrincipaisNoticias(callback: NoticiaInicial.Presenter){
+    fun getPrincipaisNoticias(callback: NoticiaInicial.Presenter,country : String? = "br"){
         GlobalScope.launch(Dispatchers.Main){
-            val resposta = RetrofitInstancia.api.getPrincipaisNoticias("br")
-            if (resposta.isSuccessful){
+            val resposta = country?.let { RetrofitInstancia.api.getPrincipaisNoticias(it) }
+            if (resposta!!.isSuccessful){
                 resposta.body()?.let {respotaComNoticia->
                     callback.sucesso(respotaComNoticia)
                 }

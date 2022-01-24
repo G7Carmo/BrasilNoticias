@@ -1,18 +1,21 @@
 package com.gds.brasilnoticias.ui
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewbinding.ViewBinding
 import com.gds.brasilnoticias.R
 import com.gds.brasilnoticias.adapter.MainAdapter
+import com.gds.brasilnoticias.databinding.ActivityPesquisarBinding
 import com.gds.brasilnoticias.model.Artigo
 import com.gds.brasilnoticias.model.data.NewsDataSource
 import com.gds.brasilnoticias.presenter.ViewHome
 import com.gds.brasilnoticias.presenter.pesquisar.PesquisarPresenter
 import com.gds.brasilnoticias.util.UtilQueryTextListner
-import kotlinx.android.synthetic.main.activity_pesquisar.*
 
 class PesquisarActivity : AbstractActivity(), ViewHome.View {
 
@@ -20,8 +23,18 @@ class PesquisarActivity : AbstractActivity(), ViewHome.View {
         MainAdapter()
     }
     private lateinit var presenter: PesquisarPresenter
+    private lateinit var binding: ActivityPesquisarBinding
 
-    override fun getLayout(): Int = R.layout.activity_pesquisar
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+    }
+
+    override fun getLayout(): ViewBinding {
+        binding = ActivityPesquisarBinding.inflate(layoutInflater)
+        return binding
+    }
 
     override fun onInject() {
         configPresenter()
@@ -36,7 +49,7 @@ class PesquisarActivity : AbstractActivity(), ViewHome.View {
     }
 
     fun pesquisarNoticia() {
-        pesquisarNoticias
+        binding.pesquisarNoticias
             .setOnQueryTextListener(
                 UtilQueryTextListner(this.lifecycle) { newText ->
                     newText?.let { query ->
@@ -49,12 +62,12 @@ class PesquisarActivity : AbstractActivity(), ViewHome.View {
     private fun validandoQuery(query: String) {
         if (query.isNotEmpty()) {
             presenter.pesquisar(query)
-            rvProgressBarTelaPesquisar.visibility = View.VISIBLE
+            binding.rvProgressBarTelaPesquisar.visibility = View.VISIBLE
         }
     }
 
     private fun configRecycler() {
-        with(rvPeesquisar) {
+        with(binding.rvPeesquisar) {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(this@PesquisarActivity)
             addItemDecoration(
@@ -67,25 +80,26 @@ class PesquisarActivity : AbstractActivity(), ViewHome.View {
         }
 
     }
-    private fun clickAdapter(){
+
+    private fun clickAdapter() {
         searchAdapter.setOnClickListner { artigo ->
-            val intent = Intent(this,ArtigoActivity::class.java)
-            intent.putExtra("artigo",artigo)
+            val intent = Intent(this, ArtigoActivity::class.java)
+            intent.putExtra("artigo", artigo)
             startActivity(intent)
         }
     }
 
 
     override fun mostrarBarraDeProgresso() {
-        rvProgressBarTelaPesquisar.visibility = View.VISIBLE
+        binding.rvProgressBarTelaPesquisar.visibility = View.VISIBLE
     }
 
     override fun showFalha(mensagem: String) {
-        Toast.makeText(this,mensagem,Toast.LENGTH_LONG).show()
+        Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
     }
 
     override fun esconderBarraDeProgresso() {
-        rvProgressBarTelaPesquisar.visibility = View.INVISIBLE
+        binding.rvProgressBarTelaPesquisar.visibility = View.INVISIBLE
     }
 
     override fun mostrarArtigos(artigos: List<Artigo>) {

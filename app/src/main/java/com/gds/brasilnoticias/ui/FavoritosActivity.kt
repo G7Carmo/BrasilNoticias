@@ -1,27 +1,35 @@
 package com.gds.brasilnoticias.ui
 
 import android.content.Intent
+import android.os.Bundle
+import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.*
+import androidx.viewbinding.ViewBinding
 import com.gds.brasilnoticias.R
 import com.gds.brasilnoticias.adapter.MainAdapter
+import com.gds.brasilnoticias.databinding.ActivityFavoritosBinding
 import com.gds.brasilnoticias.model.Artigo
 import com.gds.brasilnoticias.model.data.NewsDataSource
 import com.gds.brasilnoticias.presenter.ViewHome
 import com.gds.brasilnoticias.presenter.favoritos.FavoritosPresenter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_favoritos.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class FavoritosActivity : AbstractActivity(), ViewHome.Favoritos {
 
     private val _adapter by lazy { MainAdapter() }
     private lateinit var presenter: FavoritosPresenter
-    override fun getLayout(): Int = R.layout.activity_favoritos
+    private lateinit var binding: ActivityFavoritosBinding
+
+    override fun getLayout(): ViewBinding {
+        binding = ActivityFavoritosBinding.inflate(layoutInflater)
+        return binding
+    }
+
     override fun onInject() {
         configPresenter()
         configRecycler()
         clickAdapter()
-
 //        funcao de remover arrastando
         configRemoverItem()
     }
@@ -58,7 +66,7 @@ class FavoritosActivity : AbstractActivity(), ViewHome.Favoritos {
         }
         //configurando a acao de remover arrastando ao recyclerView
         ItemTouchHelper(itemTouchPerCallback).apply {
-            attachToRecyclerView(rvFavoritos)
+            attachToRecyclerView(binding.rvFavoritos)
         }
 
         presenter.getAll()
@@ -82,7 +90,7 @@ class FavoritosActivity : AbstractActivity(), ViewHome.Favoritos {
     }
 
     private fun configRecycler() {
-        with(rvFavoritos) {
+        with(binding.rvFavoritos) {
             adapter = _adapter
             layoutManager = LinearLayoutManager(this@FavoritosActivity)
             addItemDecoration(
