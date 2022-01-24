@@ -18,7 +18,7 @@ abstract class BaseFragment<VM : ViewModel,VB : ViewBinding> : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         binding = getFragmentBind(inflater,container)
 
-        val factory = ViewModelFactory(getFragmenRepository())
+        val factory = ViewModelFactory(getFragmenRepository(), application = requireActivity().application)
         viewModel = ViewModelProvider(viewModelStore,factory).get(getViewModel())
 
         return binding.root

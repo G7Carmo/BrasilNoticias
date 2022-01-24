@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,6 +66,10 @@ class FavoritosFragment: BaseFragment<FavoritosViewModel,FragmentFavoritosBindin
             )
             ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(this)
         }
+        mainAdapter.setOnClickListner {artigo->
+            val action = FavoritosFragmentDirections.actionFavoritosFragmentToWebViewFragment(artigo)
+            findNavController().navigate(action)
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -92,15 +97,15 @@ class FavoritosFragment: BaseFragment<FavoritosViewModel,FragmentFavoritosBindin
         viewModel.favorite.observe(viewLifecycleOwner, Observer {response->
             when(response){
                 is ArticleListState.Sucesso->{
-                    binding.rvFavoritos.hide()
+                    binding.tvEmptyList.hide()
                         mainAdapter.differ.submitList(response.list)
                 }
                 is ArticleListState.ErrorMessage->{
-                    binding.rvFavoritos.hide()
+                    binding.tvEmptyList.hide()
                     mensagem(requireContext(),"Ocorreu um Erro : ${response.errorMessage.toString()}")
                 }
                 is ArticleListState.Loading->{
-                    binding.rvFavoritos.show()
+                    binding.tvEmptyList.hide()
                 }
                 is ArticleListState.Empty->{
                     binding.tvEmptyList.show()

@@ -1,19 +1,19 @@
 package com.gds.brasilnoticias.ui.fragments.pesquisa
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.gds.brasilnoticias.data.local.model.RespostaDaNoticia
 import com.gds.brasilnoticias.repository.NewsRepository
+import com.gds.brasilnoticias.util.checkForInternetConnection
 import com.gds.brasilnoticias.util.state.StateResource
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.lang.Exception
 
 class PesquisaViewModel constructor(
-    private val repository: NewsRepository
-) : ViewModel() {
+    private val repository: NewsRepository,
+    application: Application
+) : AndroidViewModel(application) {
     private val _search = MutableLiveData<StateResource<RespostaDaNoticia>>()
     val search: LiveData<StateResource<RespostaDaNoticia>> = _search
 
@@ -24,8 +24,12 @@ class PesquisaViewModel constructor(
     private suspend fun safeFetchSearch(query: String) {
         _search.value = StateResource.Loanding()
         try {
-            val response = repository.search(query = query)
-            _search.value = handleResponse(response)
+            if (checkForInternetConnection(getApplication())){
+                val response = repository.search(query = query)
+                _search.value = handleResponse(response)
+            }else{
+                _search.value = StateResource.Error("Falha na conexao")
+            }
         } catch (e: Exception) {
 
         }
